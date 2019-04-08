@@ -1,10 +1,9 @@
 package com.service.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -20,6 +19,8 @@ import com.service.dao.ChefDAO;
 import com.service.model.ChefBean;
 import com.service.model.ChefOperationsMessageBean;
 import com.service.model.UpdateOrderBean;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 
 @Path("/chef")
 public class ChefController {
@@ -46,17 +47,19 @@ public class ChefController {
 		return chefDao.selectChef(id);
 	}
 
+
+
 	@POST
 	@Path("/addchef")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes({MediaType.MULTIPART_FORM_DATA,MediaType.APPLICATION_JSON})
-	public List<ChefOperationsMessageBean> addChef(ChefBean chefBean) throws SQLException {
+	public List<ChefOperationsMessageBean> addChef(@FormDataParam("chefImage") InputStream uploadedInputStream,
+		    @FormDataParam("chefImage") FormDataContentDisposition fileDetails,@FormDataParam("restaurantId") int restaurantId,@FormDataParam("chefName") String chefName,
+		    @FormDataParam("chefMobile")String chefMobile,@FormDataParam("chefGender") String chefGender) throws SQLException  {
 		System.out.println("Chef Inserted...");
+		return chefDao.insertChef(uploadedInputStream,fileDetails,restaurantId,chefName,chefMobile,chefGender);
 
-		return chefDao.insertChef(chefBean);
-
-	}
-	
+	} 
 	@PUT
 	@Path("/updatechef")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -78,11 +81,11 @@ public class ChefController {
 
 	@PUT
 	@Path("/updatechefid")
-    @Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-    public List<ChefOperationsMessageBean> updateChef(UpdateOrderBean updateChefInorder) throws SQLException{
-	   return chefDao.UpdateChefId(updateChefInorder);
-       
-    }
+	public List<ChefOperationsMessageBean> updateChef(UpdateOrderBean updateChefInorder) throws SQLException {
+		return chefDao.UpdateChefId(updateChefInorder);
+
+	}
 
 }

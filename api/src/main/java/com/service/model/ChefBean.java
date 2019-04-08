@@ -1,7 +1,11 @@
 package com.service.model;
 
+import java.io.InputStream;
 
-public class ChefBean {
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
+
+public class  ChefBean {
 	
 	 int chefId;
 	 int restaurantId;

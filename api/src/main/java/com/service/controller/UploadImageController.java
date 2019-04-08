@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.service.model.ChefBean;
 import com.service.model.UploadImageBean;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
@@ -21,16 +22,17 @@ public class UploadImageController {
 
 	@POST
 	@Path("/image")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	 @Produces("text/plain")
-	public String uploadImage(
-	    @FormDataParam("file") InputStream uploadedInputStream,
-	    @FormDataParam("file") FormDataContentDisposition fileDetails) {
+	@Consumes({MediaType.MULTIPART_FORM_DATA,MediaType.APPLICATION_JSON})
+	@Produces("text/plain")
+	public String uploadImage(@FormDataParam("file") InputStream uploadedInputStream,
+	    @FormDataParam("file") FormDataContentDisposition fileDetails) throws IOException {
 
 	   System.out.println(fileDetails.getFileName());
 
-	   String uploadedFileLocation =  "E://Images_pop/"+ fileDetails.getFileName();
-
+	  
+	   String tomcatBase = System.getProperty("catalina.base")+"\\webapps\\ROOT\\chefImage\\";
+	   System.out.println(tomcatBase+"   tomcat.......");
+	   String uploadedFileLocation =  tomcatBase + fileDetails.getFileName();
 	   // save it
 	   writeToFile(uploadedInputStream, uploadedFileLocation);
 
